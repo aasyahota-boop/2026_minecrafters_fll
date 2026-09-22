@@ -11,9 +11,6 @@ motor_pair.pair(motor_pair.PAIR_1, port.A, port.E)
 async def moveFront(rotations):
     await motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, int(rotations*360), 500, 500, acceleration=500)
 
-async def moveFrontSlow(rotations):
-    await motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, int(rotations*360), 100, 100, acceleration=100)
-
 async def moveBack(rotations):
     await motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, int(-rotations*360), 500, 500, acceleration=500)
 
@@ -37,7 +34,24 @@ async def moveFrontAndAttachmentTogether(drive_rotations, attachment_rotations):
     motor.run_for_degrees(port.D, int(attachment_rotations * 360), 200)
     await moveFrontSlow(drive_rotations)
 
+async def moveBackAndAttachmentTogether(drive_rotations, rotations):
+    motor.run_for_degrees(port.D, int(rotations*360), 1050, acceleration=10000)
+    await moveBackFast(drive_rotations)
+
+async def turnLeftAndMoveAttachmentTogether(drive_rotations, rotations):
+    motor.run_for_degrees(port.D, int(rotations*360), 1050, acceleration=10000)
+    await turnLeftSlow(drive_rotations)
+
+async def moveFrontSlow(rotations):
+    await motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, int(rotations*360), 100, 100, acceleration=100)
+
+async def moveBackFast(rotations):
+    await motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, int(-rotations*360), 1500, 1500, acceleration=1500)
+
+async def turnLeftSlow(degree):
+    await motor_pair.move_tank_for_degrees(motor_pair.PAIR_1, degree*2, -500, 100, acceleration=100)
+    
 async def main():
-    await moveFront(1)
+    await mission5()
 
 runloop.run(main())
